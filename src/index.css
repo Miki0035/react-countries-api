@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: NunitoExtraBold;
+  src: url("./assets/fonts/Nunito_Sans/static/NunitoSans_7pt_Condensed-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: NunitoSemiBold;
+  src: url("./assets/fonts/Nunito_Sans/static/NunitoSans_7pt_Condensed-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: NunitoLight;
+  src: url("./assets/fonts/Nunito_Sans/static/NunitoSans_7pt_Condensed-Light.ttf");
+}
+
+@font-face {
+  font-family: NunitoRegular;
+  src: url("./assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Regular.ttf");
+}
+
+:root {
+  --darkBlueDarkModeElement: hsl(209, 23%, 22%);
+  --veryDarkBlueDarkModeBackground: hsl(207, 26%, 17%);
+  --veryDarkBlueLightModeText: hsl(200, 15%, 8%);
+  --darkGrayLightModeInput: hsl(0, 0%, 52%);
+  --veryLightGrayLightModeBackground: hsl(0, 0%, 98%);
+  --lightModeElement: hsl(0, 0%, 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
