@@ -13,6 +13,7 @@ const DropDownFilter = () => {
   return (
     <div className="w-full flex flex-col items-start mt-5 md:items-end md:mt-0 md:ml-0 ">
       <select
+        aria-label="Filter by Region"
         id="region"
         className={`${
           isDarkMode ? darkMode : lightMode
