@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ContextProvider";
-import data from "../constants/data.json";
 import CountryCard from "./CountryCard";
+import { Country } from "../types";
 
 const CountryGrid = () => {
   const { isDarkMode, country, region } = useContext(ThemeContext);
@@ -13,10 +13,15 @@ const CountryGrid = () => {
 
   const [countryPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [countries, setCountries] = useState<Country[]>([]);
 
   const indexOfLastCountry = currentPage * countryPerPage;
   const indexofFirstCountry = indexOfLastCountry - countryPerPage;
-  const currentCountries = data.slice(indexofFirstCountry, indexOfLastCountry);
+  const currentCountries = countries.slice(
+    indexofFirstCountry,
+    indexOfLastCountry
+  );
 
   //previous page
   const prevPage = () => {
@@ -29,12 +34,24 @@ const CountryGrid = () => {
 
   //next page
   const nextPage = () => {
-    if (currentPage >= Math.ceil(data.length / countryPerPage)) {
+    if (currentPage >= Math.ceil(countries.length / countryPerPage)) {
       setCurrentPage(1);
     } else {
       setCurrentPage((prev) => prev + 1);
     }
   };
+
+  const fetchAllCountries = async () => {
+    setIsLoading(true);
+    const response = await fetch("https://restcountries.com/v3.1/all");
+    const countries = await response.json();
+    setCountries(countries);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllCountries();
+  }, []);
 
   return (
     <article className="w-full h-dvh">
@@ -43,12 +60,14 @@ const CountryGrid = () => {
           isDarkMode ? darkMode : lightMode
         } w-full grid grid-cols-1 gap-2 justify-items-center lg:grid-cols-2 lg:gap-2 xl:grid-cols-4 xl:gap-8 xl:px-10 `}
       >
-        {country && region ? (
+        {isLoading && countries.length <= 0 ? (
+          <div>Loading...</div>
+        ) : country && region ? (
           (() => {
-            const found = data.filter(
+            const found = countries.filter(
               (value) =>
                 value.region.trim().toLowerCase() === region.toLowerCase() &&
-                value.name
+                value.name.common
                   .trim()
                   .toLowerCase()
                   .startsWith(country.toLowerCase())
@@ -73,11 +92,11 @@ const CountryGrid = () => {
               );
             return found.map((countries, index) => (
               <CountryCard
-                image={countries.flag}
+                image={countries.flags.svg}
                 name={countries.name}
                 population={countries.population}
                 region={countries.region}
-                capital={countries.capital!}
+                capital={countries.capital?.[0] ?? ""}
                 nativeName={""}
                 subregion={""}
                 topLevelDomain={""}
@@ -90,8 +109,11 @@ const CountryGrid = () => {
           })()
         ) : country ? (
           (() => {
-            const found = data.filter((value) =>
-              value.name.trim().toLowerCase().startsWith(country.toLowerCase())
+            const found = countries.filter((value) =>
+              value.name.common
+                .trim()
+                .toLowerCase()
+                .startsWith(country.toLowerCase())
             );
             if (found.length === 0)
               return (
@@ -113,11 +135,11 @@ const CountryGrid = () => {
               );
             return found.map((countries, index) => (
               <CountryCard
-                image={countries.flag}
+                image={countries.flags.svg}
                 name={countries.name}
                 population={countries.population}
                 region={countries.region}
-                capital={countries.capital!}
+                capital={countries.capital?.[0] ?? ""}
                 nativeName={""}
                 subregion={""}
                 topLevelDomain={""}
@@ -130,17 +152,17 @@ const CountryGrid = () => {
           })()
         ) : region ? (
           (() => {
-            const found = data.filter(
+            const found = countries.filter(
               (value) =>
                 value.region.trim().toLowerCase() === region.toLowerCase()
             );
             return found.map((countries, index) => (
               <CountryCard
-                image={countries.flag}
+                image={countries.flags.svg}
                 name={countries.name}
                 population={countries.population}
                 region={countries.region}
-                capital={countries.capital!}
+                capital={countries.capital?.[0] ?? ""}
                 nativeName={""}
                 subregion={""}
                 topLevelDomain={""}
@@ -156,11 +178,11 @@ const CountryGrid = () => {
             {currentCountries.map((country, index) => (
               <CountryCard
                 key={index}
-                image={country.flag}
+                image={country.flags.svg}
                 name={country.name}
                 population={country.population}
                 region={country.region}
-                capital={country.capital!}
+                capital={country.capital?.[0] ?? ""}
                 nativeName={""}
                 subregion={""}
                 topLevelDomain={""}

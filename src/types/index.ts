@@ -15,7 +15,10 @@ export type ThemeContextProps = {
 export type CountryCardProps = {
   key: number;
   image: string;
-  name: string;
+  name: {
+    common: string;
+    official: string;
+  };
   population: number;
   region: string;
   capital: string | "";
@@ -35,63 +38,98 @@ export type CountryCardProps = {
 
 //Country detail props
 export interface CountryDetailProps {
-  name?: string | "";
-  topLevelDomain?: string[] | [];
-  alpha2Code?: string | "";
-  alpha3Code?: string | "";
-  callingCodes?: string[] | [];
-  capital?: string | "";
-  altSpellings?: string[] | [];
-  subregion?: string | "";
-  region?: string | "";
-  population?: number | "";
-  latlng?: number[] | [];
-  demonym?: string | "";
-  area?: number | "";
-  timezones?: string[] | [];
-  borders?: string[] | [];
-  nativeName?: string | "";
-  numericCode?: string | "";
-  flags?: {
-    svg?: string | "";
-    png?: string | "";
-  };
-  currencies?: currency[];
-  languages?: language[];
-  translations?: {
-    br?: string | "";
-    pt?: string | "";
-    nl?: string | "";
-    hr?: string | "";
-    fa?: string | "";
-    de?: string | "";
-    es?: string | "";
-    fr?: string | "";
-    ja?: string | "";
-    it?: string | "";
-    hu?: string | "";
-  };
-  flag?: string | "";
-  regionalBlocs?: regionBloc [];
-  cioc?: string | "";
-  independent?: boolean | "";
+  country: Country;
   setIsShowing: () => void | undefined;
 }
 
-type currency = {
-  code?: string;
-  name?: string;
-  symbol?: string;
-};
-
-type language = {
-  iso639_1?: string;
-  iso639_2?: string;
-  name?: string;
-  nativeName?: string;
-};
-
-type regionBloc = {
-  acronym?: string;
-  name?: string;
-};
+//Country interface for the API
+export interface Country {
+  name: {
+    common: string;
+    official: string;
+    nativeName?: {
+      [key: string]: {
+        official: string;
+        common: string;
+      };
+    };
+  };
+  tld?: string[];
+  cca2: string;
+  ccn3?: string;
+  cca3: string;
+  cioc?: string;
+  independent?: boolean;
+  status: string;
+  unMember: boolean;
+  currencies?: {
+    [key: string]: {
+      name: string;
+      symbol: string;
+    };
+  };
+  idd: {
+    root?: string;
+    suffixes?: string[];
+  };
+  capital?: string[];
+  altSpellings: string[];
+  region: string;
+  subregion?: string;
+  languages?: {
+    [key: string]: string;
+  };
+  translations?: {
+    [key: string]: {
+      official: string;
+      common: string;
+    };
+  };
+  latlng: [number, number];
+  landlocked: boolean;
+  borders?: string[];
+  area: number;
+  demonyms?: {
+    eng: {
+      f: string;
+      m: string;
+    };
+    [key: string]: {
+      f: string;
+      m: string;
+    };
+  };
+  flag: string;
+  maps: {
+    googleMaps: string;
+    openStreetMaps: string;
+  };
+  population: number;
+  gini?: {
+    [year: string]: number;
+  };
+  fifa?: string;
+  car: {
+    signs: string[];
+    side: string;
+  };
+  timezones: string[];
+  continents: string[];
+  flags: {
+    png: string;
+    svg: string;
+    alt?: string;
+  };
+  coatOfArms?: {
+    png?: string;
+    svg?: string;
+  };
+  startOfWeek: string;
+  capitalInfo: {
+    latlng?: [number, number];
+  };
+  postalCode?: {
+    format: string;
+    regex?: string;
+  };
+}

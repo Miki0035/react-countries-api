@@ -3,28 +3,16 @@ import { BiArrowBack } from "react-icons/bi";
 import { ThemeContext } from "../context/ContextProvider";
 import { CountryDetailProps } from "../types";
 import { numberWithCommas } from "../utils";
-import data from "../constants/data.json";
 
 const CountryDetailCard: React.FC<CountryDetailProps> = ({
   setIsShowing,
-  flag,
-  name,
-  nativeName,
-  population,
-  region,
-  subregion,
-  capital,
-  topLevelDomain,
-  currencies,
-  languages,
-  borders,
+  country,
 }) => {
   const darkModeBorderColor = `shadow-md shadow-veryDarkBlueLightModeText`;
   const lightModeBorderColor = `shadow-md shadow-darkGrayLightModeInput`;
   const lightMode = `text-veryDarkBlueLightModeText bg-veryLightGrayLightModeBackground`;
   const darkMode = `text-lightModeElement bg-veryDarkBlueDarkModeBackground`;
   const { isDarkMode } = useContext(ThemeContext);
-
   return (
     <div
       className={` ${
@@ -44,72 +32,79 @@ const CountryDetailCard: React.FC<CountryDetailProps> = ({
         </div>
         <div className="w-full flex flex-col lg:flex-row justify-between items-center lg:px-3 lg:py-5 lg:justify-center">
           <div className="w-full flex  max-w-[450px] justify-center  lg:justify-start lg:mr-4  ">
-            <img className="w-full h-full" src={flag} alt={flag} />
+            <img
+              className="w-full h-full"
+              src={country.flags.svg}
+              alt={country.flags.svg}
+            />
           </div>
           <div className="flex flex-col items-start px-5 py-3 mb-3 lg:ml-5 lg:py-0">
             <h1 className="font-nunitoExtraBold text-xl my-3 md:text-2xl">
-              {name}
+              {country.name.common}
             </h1>
             <div className="flex flex-col md:flex-row md:justify-between md:full lg:w-[600px]">
               <div className="flex flex-col">
                 <p className="font-nunitolight text-md py-1">
                   Native Name:{" "}
-                  <span className="font-nunitoLight  text-sm">
-                    {" "}
-                    {nativeName}
-                  </span>{" "}
+                  {country.name.nativeName &&
+                    Object.keys(country.name.nativeName!).map((key) => (
+                      <span key={key} className="font-nunitoLight  text-sm">
+                        {country.name.nativeName![key].common} (
+                        {country.name.nativeName![key].official})
+                      </span>
+                    ))}{" "}
                 </p>
                 <p className="font-nunitoBold text-md py-1">
                   Population:{" "}
                   <span className="font-nunitoLight text-md ">
-                    {numberWithCommas(population!)}
+                    {numberWithCommas(country.population!)}
                   </span>
                 </p>
                 <p className="font-nunitoBold text-md py-1">
-                  Region: <span className="font-nunitoLight"> {region}</span>{" "}
+                  Region:{" "}
+                  <span className="font-nunitoLight"> {country.region}</span>{" "}
                 </p>
                 <p className="font-nunitoBold text-md py-1">
                   Sub Region:{" "}
-                  <span className="font-nunitoLight"> {subregion}</span>{" "}
+                  <span className="font-nunitoLight"> {country.subregion}</span>{" "}
                 </p>
                 <p className="font-nunitoBold text-md py-1">
-                  Capital: <span className="font-nunitoLight"> {capital}</span>{" "}
+                  Capital:{" "}
+                  <span className="font-nunitoLight"> {country.capital}</span>{" "}
                 </p>
               </div>
               <div className="flex flex-col items-start md:ml-3 md:w-[300px]">
                 <p className="font-nunitoBold text-md py-1">
                   Top Level Domain:{" "}
-                  <span className="font-nunitoLight"> {topLevelDomain}</span>{" "}
+                  <span className="font-nunitoLight"> {country.cca2}</span>{" "}
                 </p>
                 <p className="font-nunitoBold text-md py-1 flex flex-wrap">
                   Currencies:{" "}
-                  {currencies?.map((currency, index) => (
-                    <span key={index} className={`font-nunitoLight mx-1`}>
-                      {currency.name}
-                    </span>
-                  ))}
+                  {country.currencies &&
+                    Object.keys(country.currencies).map((key) => (
+                      <span key={key} className={`font-nunitoLight mx-1`}>
+                        {country.currencies![key].name}{" "}
+                        {country.currencies![key].symbol}
+                      </span>
+                    ))}
                 </p>
                 <p className="font-nunitoBold text-md py-1 ">
                   Languages:{" "}
-                  {languages?.map((language, index) => (
-                    <span key={index} className={`font-nunitoLight`}>
-                      {language.name}{" "}
-                      {index === languages.length - 1 ? " " : " ,"}
-                    </span>
-                  ))}
+                  {country.languages &&
+                    Object.keys(country.languages).map((key) => (
+                      <span key={key} className={`font-nunitoLight`}>
+                        {country.languages![key]}{" "}
+                      </span>
+                    ))}
                 </p>
               </div>
             </div>
             <div className="font-nunitoBold text-md flex flex-col mt-7 lg:flex-row lg:items-center lg:mt-12">
               <span className="mb-2 lg:mr-2">Border Countries: </span>
               <div className="flex justify-start flex-wrap">
-                {borders?.map((border, index) => {
-                  const foundCountries = data.filter(
-                    (value) =>
-                      value.alpha3Code.toLowerCase() === border.toLowerCase()
-                  );
+                {country.borders?.map((border, index) => {
                   return (
-                    foundCountries && (
+                    border && (
                       <span
                         key={index}
                         className={`px-3 text-center py-1 text-sm mx-2 my-1 font-nunitoLight ${
@@ -118,7 +113,7 @@ const CountryDetailCard: React.FC<CountryDetailProps> = ({
                             : lightModeBorderColor
                         }`}
                       >
-                        {foundCountries[0].name}{" "}
+                        {border}{" "}
                       </span>
                     )
                   );
