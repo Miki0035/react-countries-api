@@ -1,12 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 
+export interface Region {
+  name: string;
+  value: string | "";
+}
 export type ThemeContextProps = {
   isDarkMode: boolean;
   setIsDarkMode: Dispatch<SetStateAction<boolean>>;
   country: string;
   setCountry: Dispatch<SetStateAction<string>>;
-  region: string;
-  setRegion: Dispatch<SetStateAction<string>>;
+  region: Region;
+  setRegion: Dispatch<SetStateAction<Region>>;
   isShowing: boolean;
   setIsShowing: Dispatch<SetStateAction<boolean>>;
 };

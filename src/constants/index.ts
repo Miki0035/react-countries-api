@@ -1,4 +1,6 @@
-export const regions: region[] = [
+import { Region } from "../types";
+
+export const regions: Region[] = [
   {
     name: "Africa",
     value: "Africa",
@@ -20,16 +22,7 @@ export const regions: region[] = [
     value: "Oceania",
   },
   {
-    name: "Polar",
-    value: "Polar",
-  },
-  {
     name: "Clear Filter",
     value: "",
   },
 ];
-
-type region = {
-  name: string;
-  value: string | null;
-};

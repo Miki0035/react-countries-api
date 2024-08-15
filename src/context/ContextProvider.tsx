@@ -1,12 +1,12 @@
 import { useState, createContext, ReactNode } from "react";
-import { ThemeContextProps } from "../types";
+import { Region, ThemeContextProps } from "../types";
 
 const ThemeContext = createContext<ThemeContextProps>({
   isDarkMode: false,
   setIsDarkMode: () => {},
   country: "",
   setCountry: () => {},
-  region: "",
+  region: { name: "", value: "" },
   setRegion: () => {},
   isShowing: false,
   setIsShowing: () => {},
@@ -15,9 +15,11 @@ const ThemeContext = createContext<ThemeContextProps>({
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [country, setCountry] = useState("");
-  const [region, setRegion] = useState("");
+  const [region, setRegion] = useState<Region>({
+    name: "Clear Filter",
+    value: "",
+  });
   const [isShowing, setIsShowing] = useState(false);
-
 
   return (
     <ThemeContext.Provider
@@ -29,7 +31,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         region,
         setRegion,
         isShowing,
-        setIsShowing
+        setIsShowing,
       }}
     >
       {children}

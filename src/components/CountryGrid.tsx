@@ -43,10 +43,14 @@ const CountryGrid = () => {
 
   const fetchAllCountries = async () => {
     setIsLoading(true);
-    const response = await fetch("https://restcountries.com/v3.1/all");
-    const countries = await response.json();
-    setCountries(countries);
-    setIsLoading(false);
+    try {
+      const response = await fetch("https://restcountries.com/v3.1/all");
+      const countries = await response.json();
+      setCountries(countries);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(`Error loading countries: ${error}`);
+    }
   };
 
   useEffect(() => {
@@ -58,15 +62,16 @@ const CountryGrid = () => {
       <div
         className={`${
           isDarkMode ? darkMode : lightMode
-        } w-full grid grid-cols-1 gap-2 justify-items-center lg:grid-cols-2 lg:gap-2 xl:grid-cols-4 xl:gap-8 xl:px-10 `}
+        } w-full grid grid-cols-1 gap-2 justify-items-center lg:grid-cols-2 lg:gap-4 xl:grid-cols-4 xl:gap-14 xl:px-10 `}
       >
-        {isLoading && countries.length <= 0 ? (
+        {isLoading && countries.length < 0 ? (
           <div>Loading...</div>
-        ) : country && region ? (
+        ) : country && region.value !== "" ? (
           (() => {
             const found = countries.filter(
               (value) =>
-                value.region.trim().toLowerCase() === region.toLowerCase() &&
+                value.region.trim().toLowerCase() ===
+                  region.value.toLowerCase() &&
                 value.name.common
                   .trim()
                   .toLowerCase()
@@ -150,11 +155,11 @@ const CountryGrid = () => {
               />
             ));
           })()
-        ) : region ? (
+        ) : region.value !== "" ? (
           (() => {
             const found = countries.filter(
               (value) =>
-                value.region.trim().toLowerCase() === region.toLowerCase()
+                value.region.trim().toLowerCase() === region.value.toLowerCase()
             );
             return found.map((countries, index) => (
               <CountryCard
@@ -194,7 +199,7 @@ const CountryGrid = () => {
           </>
         )}
       </div>
-      {!country && !region && (
+      {!country && region.value === "" && (
         <div
           className={`${
             isDarkMode ? darkMode : lightMode

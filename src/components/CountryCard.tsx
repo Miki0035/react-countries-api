@@ -46,7 +46,7 @@ const CountryCard: React.FC<CountryCardProps> = ({
         <div
           className={`${isDarkMode ? darkMode : lightMode} ${
             isDarkMode ? darkModeBorderColor : lightModeBorderColor
-          } flex flex-col w-full max-w-[350px] my-3 rounded-sm cursor-pointer`}
+          } flex flex-col w-full max-w-[450px] my-3 rounded-sm cursor-pointer`}
           onClick={() => {
             showCountryDetail(name.common);
           }}
