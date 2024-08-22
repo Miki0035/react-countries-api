@@ -19,13 +19,17 @@ const CountryCard: React.FC<CountryCardProps> = ({
   const [currentCountry, setCurrentCountry] = useState<Country | null>();
 
   const showCountryDetail = async (countryName: string) => {
-    const response = await fetch(
-      `https://restcountries.com/v3.1/name/${countryName}/`
-    );
-    const data = await response.json();
-    setCurrentCountry(data[0]);
-    scrollToTop();
-    setIsShowing(true);
+    try {
+      const response = await fetch(
+        `https://restcountries.com/v3.1/name/${countryName}/`
+      );
+      const data = await response.json();
+      setCurrentCountry(data[0]);
+      scrollToTop();
+      setIsShowing(true);
+    } catch (error) {
+      console.error(`Something went wrong getting country info: ${error}`);
+    }
   };
 
   const scrollToTop = () => {
@@ -35,7 +39,7 @@ const CountryCard: React.FC<CountryCardProps> = ({
 
   const notShowing = () => {
     setIsShowing(false);
-    setCurrentCountry(null)
+    setCurrentCountry(null);
   };
 
   return (
