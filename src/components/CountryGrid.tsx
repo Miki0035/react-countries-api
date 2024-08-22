@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ContextProvider";
 import CountryCard from "./CountryCard";
 import { Country } from "../types";
+import { ClipLoader } from "react-spinners";
 
 const CountryGrid = () => {
   const { isDarkMode, country, region } = useContext(ThemeContext);
@@ -56,6 +57,19 @@ const CountryGrid = () => {
   useEffect(() => {
     fetchAllCountries();
   }, []);
+
+  if (isLoading)
+    return (
+      <div
+        className={`flex justify-center items-center${
+          isDarkMode
+            ? "bg-veryDarkBlueDarkModeBackground text-veryDarkBlueLightModeText"
+            : "bg-veryLightGrayLightModeBackground text-veryDarkBlueLightModeText"
+        }`}
+      >
+        <ClipLoader color={isDarkMode ? 'hsl(0, 0%, 98%)' : 'hsl(207, 26%, 17%)'} size={38} />
+      </div>
+    );
 
   return (
     <article className="w-full h-dvh">
